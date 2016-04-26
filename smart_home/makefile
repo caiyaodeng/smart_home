@@ -1,0 +1,33 @@
+.SUFFIXES:.cpp.o 
+CC=clang++ 	
+OBJK1=$(SRC1:.cpp=.o)
+EXEC1=server
+SRC1=srv.cpp \
+	 ../net/tcp_task_pool.cpp \
+	 ../net/net_work.cpp \
+	 ../base/buffer.cpp \
+	 ../base/socket_util.cpp \
+	 ../base/tcp_socket.cpp \
+	 ../db/mysql/db_mysql.cpp \
+	 id_identifier.cpp \
+	 message_parser.cpp \
+	 message_shunter.cpp \
+	 polling_machine.cpp \
+	 ready_device.cpp \
+	 ready_user.cpp \
+	 transit_center.cpp \
+	 undo_task.cpp \
+	 user_configure_updater.cpp \
+	 bll.cpp\
+	 dal.cpp
+
+start:$(OBJK1) 
+	$(CC) -o $(EXEC1) $(OBJK1) -L/usr/lib64/mysql -lmysqlclient -lpthread  
+	@echo ---------ok------- 
+
+.cpp.o:$(SRC1)
+	$(CC) -g -Wall -std=c++11 -o $@ -c $<  
+clean:  
+	rm -f $(OBJK1) 
+	rm -f $(EXEC1) 
+	rm -f core.* 
