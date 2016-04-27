@@ -73,13 +73,16 @@ bool TransitCenter::getResponse(Message *pMsg, int iTaskId, std::list <ReadyUser
 
     std::cout << "transit ok" << std::endl;
     if (pMsg->destination_id == 0) {
-        /*if (!multCommand(pMsg, readyDeviceList)) {
+        if (!pushServResponse()) {
             return false;
         }
-        */
+        
         std::cout << "serv!" << std::endl;
     } 
     else {
+        if (!pushUserResponse(pMsg->destination_id, pMsg->source_id, readyUserList)) {
+            return false;
+        }
         std::cout << "peer!" << std::endl;
     }
     return true; 
@@ -165,7 +168,20 @@ bool TransitCenter::pushServResponse() {
     //
     return true;
 }
-bool TransitCenter::pushUserResponse(std::list <ReadyDevice> &readyDeviceList) {
-    //
+bool TransitCenter::pushUserResponse(int iUserId, int iDeviceId, std::list <ReadyUser> &readyUserList) { 
+    std::list <ReadyUser>::iterator i; 
+    for (i=readyUserList.begin(); i != readyUserList.end(); i++) {
+        if ((*i).getUserId() == iUserId) {
+            sprintf((char *)(*i).getPeerAddr(), "dACK%04d%04d0000--------------------------------|", iDeviceId, iUserId);
+            *((*i).getPeerLenAddr()) = COMMAND_SIZE+18;
+            m_pDal->sendToPeer((*i).getTaskId());
+            break;
+        }
+	}
+
+    if (i == readyUserList.end()) {
+        return false;
+    }
+
     return true;
 }

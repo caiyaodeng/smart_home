@@ -224,7 +224,6 @@ namespace mynamespace {
         push_free_task(del_subscript);
         std::cout << "reset id free" << del_subscript << endl;
 
-        printf("nihao1");
         return true;
     }
     int TcpTaskPool::recv_msg(const int fd) {
