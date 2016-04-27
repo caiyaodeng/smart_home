@@ -176,7 +176,7 @@ UndoTask *Bll::popTask() {
 }
 
 int Bll::polling(std::list <ReadyDevice> &readyDeviceList, std::list <UndoTask> &undoTasks)  {
-    if (!m_pStatusPoller->pollingTask(readyDeviceList, undoTasks)) {
+    if (!m_pStatusPoller->pollingTask(readyDeviceList, m_pDal)) {
         return 0;
     }
     return -1;

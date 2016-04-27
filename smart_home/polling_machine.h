@@ -9,14 +9,15 @@
 #define _POLLINGMACHINE_H_
 
 #include "ready_device.h"
-#include "undo_task.h"
 #include <iostream>
 #include <list>
+#include "dal.h"
+#include "protocol_command.h"
 
 class PollingMachine {
     public:
         PollingMachine();
         ~PollingMachine();
-    	bool pollingTask(std::list <ReadyDevice> &readyDeviceList, std::list <UndoTask> &undoTasks);
+    	bool pollingTask(std::list <ReadyDevice> &readyDeviceList, Dal *&pDal);
 };
 #endif

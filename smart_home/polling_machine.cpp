@@ -14,14 +14,13 @@ PollingMachine::PollingMachine() {
 PollingMachine::~PollingMachine() {
 
 }
-bool PollingMachine::pollingTask(std::list <ReadyDevice> &readyDeviceList, std::list <UndoTask> &undoTasks) {
+bool PollingMachine::pollingTask(std::list <ReadyDevice> &readyDeviceList,Dal *&pDal) {
     std::list <ReadyDevice>::iterator i;
     
 	for (i = readyDeviceList.begin(); i != readyDeviceList.end() ; i++) {
-		UndoTask *pUndoTask = new UndoTask();
-		pUndoTask->setDestinationId((i)->getDeviceId());
-		pUndoTask->setSourceId((const char *)"SERV");
-		undoTasks.push_back(*pUndoTask);
+		sprintf((char *)(*i).getPeerAddr(), "dSEQSERV%04d0000--------------------------------|", (*i).getDeviceId());
+        *((*i).getPeerLenAddr()) = COMMAND_SIZE+18;
+        pDal->sendToPeer((*i).getTaskId());
 	}
 
     return true;
