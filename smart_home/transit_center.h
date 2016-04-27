@@ -11,6 +11,7 @@
 #include "message.h"
 #include "dal.h"
 #include "ready_device.h"
+#include "ready_user.h"
 
 class TransitCenter {
     public:
@@ -18,9 +19,11 @@ class TransitCenter {
         ~TransitCenter();
     public:
         bool forwardCommand(Message *pMsg, int iTaskId, std::list <ReadyDevice> &readyDeviceList);
-        bool forwardState(Message *pMsg, int iTaskId, std::list <ReadyDevice> &readyDeviceList);
+        bool getResponse(Message *pMsg, int iTaskId, std::list <ReadyUser> &readyUserList);
     protected:
         bool multCommand(Message *pMsg, std::list <ReadyDevice> &readyDeviceList);
+        bool pushServResponse(); 
+        bool pushUserResponse(std::list <ReadyDevice> &readyDeviceList); 
     private:
         Dal *m_pDal;
 };

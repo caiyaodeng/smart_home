@@ -69,8 +69,20 @@ bool TransitCenter::forwardCommand(Message *pMsg, int iTaskId, std::list <ReadyD
     return true;
 }
 
-bool TransitCenter::forwardState(Message *pMsg, int iTaskId, std::list <ReadyDevice> &readyDeviceList) {
+bool TransitCenter::getResponse(Message *pMsg, int iTaskId, std::list <ReadyUser> &readyUserList) {
 
+    std::cout << "transit ok" << std::endl;
+    if (pMsg->destination_id == 0) {
+        /*if (!multCommand(pMsg, readyDeviceList)) {
+            return false;
+        }
+        */
+        std::cout << "serv!" << std::endl;
+    } 
+    else {
+        std::cout << "peer!" << std::endl;
+    }
+    return true; 
 }
 
 bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDeviceList) {
@@ -146,5 +158,14 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
     }
     free(pDefaultActions);
     pDefaultActions = nullptr;
+    return true;
+}
+
+bool TransitCenter::pushServResponse() {
+    //
+    return true;
+}
+bool TransitCenter::pushUserResponse(std::list <ReadyDevice> &readyDeviceList) {
+    //
     return true;
 }

@@ -31,7 +31,6 @@ class Bll {
         int idenfity(int iTaskId, Message *pUndoTask);
         int transmit(int iTaskId, Message *pUndoTask,std::list <ReadyDevice> &readyDeviceList);
         int update(int iTaskId, Message *pUndoTask);
-        int polling(std::list <ReadyDevice> &readyDeviceList, std::list <UndoTask> &undoTasks);
     protected:
         void addReadyUser(int iUserId, int iTaskId, unsigned char *pPeerSendAddr);
         int getUserTask(int iUserId, unsigned char *&pPeerSendAddr); //return for taskId
