@@ -96,7 +96,6 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
     memset(pTableName, '\0', 6);
     memset(pData, 0, pMsg->data_length);
     memcpy(pData, pMsg->data_ptr, pMsg->data_length);
-    //int iId = atoi(pData+1);
     int iId = atoi(pData+1);
 
     /*select right table*/
