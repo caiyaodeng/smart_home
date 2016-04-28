@@ -89,6 +89,8 @@ bool TransitCenter::getResponse(Message *pMsg, int iTaskId, std::list <ReadyUser
 }
 
 bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDeviceList) {
+std::cout << "pMsg->data_length :" << pMsg->data_length << std::endl;
+std::cout << "pMsg->data_ptr :" << pMsg->data_ptr << std::endl;
     char *pData = (char *)malloc(pMsg->data_length);
     char pTableName[6];
     char pSQL[100];
@@ -97,6 +99,7 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
     memset(pData, 0, pMsg->data_length);
     memcpy(pData, pMsg->data_ptr, pMsg->data_length);
     int iId = atoi(pData+1);
+std::cout << "pData :" << pData << std::endl;
 
     /*select right table*/
     if (*pData == ROOM_DEVICE) {
@@ -155,7 +158,7 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
 
     free(pData);
     pData = nullptr;
-    for (int i=0; i<=iRow; ++i) { /*free memory*/
+    for (int i=0; i<iCount; ++i) { /*free memory*/
         free(pDefaultActions[i]);
         pDefaultActions[i] = nullptr;
     }
