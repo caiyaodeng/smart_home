@@ -93,11 +93,11 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
     char pTableName[6];
     char pSQL[100];
     memset(pSQL, 0, 100);
-    memset(pTableName, 0, 6);
+    memset(pTableName, '\0', 6);
     memset(pData, 0, pMsg->data_length);
     memcpy(pData, pMsg->data_ptr, pMsg->data_length);
     //int iId = atoi(pData+1);
-    int iId = atoi(pData);
+    int iId = atoi(pData+1);
 
     /*select right table*/
     if (*pData == ROOM_DEVICE) {
