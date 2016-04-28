@@ -155,7 +155,7 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
 
     free(pData);
     pData = nullptr;
-    for (int i=0; i<=iRow; ++i) { /*free memory*/
+    for (int i=0; i<=iCount; ++i) { /*free memory*/
         free(pDefaultActions[i]);
         pDefaultActions[i] = nullptr;
     }
