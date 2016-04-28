@@ -105,7 +105,7 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
     if (*pData == MODEL_DEVICE) {
        memcpy(pTableName, "model", 6); 
     }
-    sprintf(pSQL, "select deviceId from %sdevice where %sId = %d;", pTableName, pTableName, iId);
+    sprintf(pSQL, "select deviceId from %sdevice where %sId = %d and userid = %d;", pTableName, pTableName, iId, pMsg->source_id);
     std::cout << "pSql"<< pSQL << std::endl;
 
     /*quary from DB*/
@@ -127,7 +127,7 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
         memset(pDefaultActions[i], 0, COMMAND_SIZE);
     }
     for (int i=0; i<iCount; ++i) {
-        sprintf(pSQL, "select defaultAction from %sdevice where deviceId = %d;", pTableName, iDeviceId[i]);
+        sprintf(pSQL, "select defaultAction from %sdevice where deviceId = %d and userid = %d and %sid = %d;", pTableName, iDeviceId[i], pMsg->source_id, pTableName, iId);
         std::cout << "pSql"<< pSQL << std::endl;
         if (m_pDal->execute(pSQL, pResult, &iRow, &iColum, strResult) == -1) {
             return false;
