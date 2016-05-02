@@ -22,8 +22,8 @@ class TransitCenter {
         bool getResponse(Message *pMsg, int iTaskId, std::list <ReadyUser> &readyUserList);
     protected:
         bool multCommand(Message *pMsg, std::list <ReadyDevice> &readyDeviceList);
-        bool pushServResponse(); 
-        bool pushUserResponse(int iUserId, int iDeviceId, std::list <ReadyUser> &readyUserList); 
+        bool pushServResponse(int iDeviceId, const char *pData); 
+        bool pushUserResponse(int iUserId, int iDeviceId, std::list <ReadyUser> &readyUserList, const char *pData); 
     private:
         Dal *m_pDal;
 };

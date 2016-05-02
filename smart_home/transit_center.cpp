@@ -73,14 +73,14 @@ bool TransitCenter::getResponse(Message *pMsg, int iTaskId, std::list <ReadyUser
 
     std::cout << "transit ok" << std::endl;
     if (pMsg->destination_id == 0) {
-        if (!pushServResponse()) {
+        if (!pushServResponse(pMsg->source_id, (const char *)pMsg->data_ptr)) {
             return false;
         }
         
         std::cout << "serv!" << std::endl;
     } 
     else {
-        if (!pushUserResponse(pMsg->destination_id, pMsg->source_id, readyUserList)) {
+        if (!pushUserResponse(pMsg->destination_id, pMsg->source_id, readyUserList, (const char *)pMsg->data_ptr)) {
             return false;
         }
         std::cout << "peer!" << std::endl;
@@ -89,8 +89,6 @@ bool TransitCenter::getResponse(Message *pMsg, int iTaskId, std::list <ReadyUser
 }
 
 bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDeviceList) {
-std::cout << "pMsg->data_length :" << pMsg->data_length << std::endl;
-std::cout << "pMsg->data_ptr :" << pMsg->data_ptr << std::endl;
     char *pData = (char *)malloc(pMsg->data_length);
     char pTableName[6];
     char pSQL[100];
@@ -99,7 +97,6 @@ std::cout << "pMsg->data_ptr :" << pMsg->data_ptr << std::endl;
     memset(pData, 0, pMsg->data_length);
     memcpy(pData, pMsg->data_ptr, pMsg->data_length);
     int iId = atoi(pData+1);
-std::cout << "pData :" << pData << std::endl;
 
     /*select right table*/
     if (*pData == ROOM_DEVICE) {
@@ -167,15 +164,32 @@ std::cout << "pData :" << pData << std::endl;
     return true;
 }
 
-bool TransitCenter::pushServResponse() {
-    //
+bool TransitCenter::pushServResponse(int iDeviceId, const char *pData) {
+    char ***pResult = nullptr;
+    char *strResult = nullptr;
+    int iRow(0), iColum(0);
+    char pSQL[100];
+    memset(pSQL, 0, 100);
+    char pCommand [33];
+    strncpy(pCommand, pData, COMMAND_SIZE);
+    pCommand[32] = '\0';
+
+    sprintf(pSQL, "update device set deviceStatus = '%s' where deviceId = %d;", pCommand, iDeviceId);
+    std::cout << pSQL << std::endl;
+    if (m_pDal->execute(pSQL, pResult, &iRow, &iColum, strResult) == -1) {
+        return false;
+    }
+   //
     return true;
 }
-bool TransitCenter::pushUserResponse(int iUserId, int iDeviceId, std::list <ReadyUser> &readyUserList) { 
+bool TransitCenter::pushUserResponse(int iUserId, int iDeviceId, std::list <ReadyUser> &readyUserList, const char *pData) { 
     std::list <ReadyUser>::iterator i; 
+    char pCommand [33];
+    strncpy(pCommand, pData, COMMAND_SIZE);
+    pCommand[32] = '\0';
     for (i=readyUserList.begin(); i != readyUserList.end(); i++) {
         if ((*i).getUserId() == iUserId) {
-            sprintf((char *)(*i).getPeerAddr(), "dACK%04d%04d0000--------------------------------|", iDeviceId, iUserId);
+            sprintf((char *)(*i).getPeerAddr(), "dACK%04d%04d0032%s|", iDeviceId, iUserId, pCommand);
             *((*i).getPeerLenAddr()) = COMMAND_SIZE+18;
             m_pDal->sendToPeer((*i).getTaskId());
             break;
@@ -183,6 +197,17 @@ bool TransitCenter::pushUserResponse(int iUserId, int iDeviceId, std::list <Read
 	}
 
     if (i == readyUserList.end()) {
+        return false;
+    }
+
+    char ***pResult = nullptr;
+    char *strResult = nullptr;
+    int iRow(0), iColum(0);
+    char pSQL[100];
+    memset(pSQL, 0, 100);
+
+    sprintf(pSQL, "update device set deviceStatus = '%s' where deviceId = %d;", pCommand, iDeviceId);
+    if (m_pDal->execute(pSQL, pResult, &iRow, &iColum, strResult) == -1) {
         return false;
     }
 

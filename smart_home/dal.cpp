@@ -21,7 +21,7 @@ Dal::~Dal() {
 bool Dal::init() {
     m_pDB = new mynamespace::MyDB();
     m_pDB->init_db();
-    if (m_pDB->conn_db("localhost", "root", "ss","SmartHome") != 0) {
+    if (m_pDB->conn_db("localhost", "root", "19940308","SmartHome") != 0) {
         return false;
     }
     return true;
