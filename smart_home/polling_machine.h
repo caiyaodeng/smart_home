@@ -18,6 +18,13 @@ class PollingMachine {
     public:
         PollingMachine();
         ~PollingMachine();
-    	bool pollingTask(std::list <ReadyDevice> &readyDeviceList, Dal *&pDal);
+
+        void setPollingObj(std::list <ReadyDevice> *readyDeviceList, Dal *&pDal, Locker *&pReadyListLocker);
+        static void *startPolling(void *arg);
+        void pollingTask();
+    private:
+        std::list <ReadyDevice> *m_readyDeviceList;
+        Dal *m_pDal;
+        Locker *m_readylist_lock;
 };
 #endif

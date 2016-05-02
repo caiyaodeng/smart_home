@@ -7,7 +7,8 @@ Bll::Bll(mynamespace::NetWork *&pNetGetter) :
     m_pUserConfigUpdater(nullptr),
     m_pStatusPoller (nullptr),
     m_pDal (nullptr) ,
-    m_pNetGetter(pNetGetter) {
+    m_pNetGetter(pNetGetter), 
+    m_pReadyListLocker(nullptr) {
 }
 
 Bll::~Bll() {
@@ -17,6 +18,10 @@ Bll::~Bll() {
     }
     if (m_pIdDistributor != nullptr) {
         delete m_pIdDistributor;
+    }
+    if (m_pReadyListLocker != nullptr) {
+        delete m_pReadyListLocker;
+        m_pReadyListLocker = nullptr;
     }
     if (m_pCommandTransmitter != nullptr) {
         delete m_pCommandTransmitter;
@@ -44,22 +49,35 @@ bool Bll::init() {
     m_pUserConfigUpdater = new UserConfigureUpdater(m_pDal);
     m_pStatusPoller = new PollingMachine(); 
     m_pRecvMessageShunter = new MessageShunter();
-    /*if (polling(m_readyDeviceList, m_undoTasks) == -1) {
-        return false;
-    }*/
+    m_pReadyListLocker = new Locker();
+
+    std::cout << "1." << &(m_readyDeviceList) << std::endl;
+    std::cout << "1." << m_pDal << std::endl;
+    m_pStatusPoller->setPollingObj(&m_readyDeviceList, m_pDal, m_pReadyListLocker);
+    std::cout << "ibll.cpp" << &m_readyDeviceList << std::endl;
+    /*start polling*/
+    pthread_t trd_polling = 0;
+    pthread_create(&trd_polling, NULL, m_pStatusPoller->startPolling, m_pStatusPoller);
+     
     return true;
 }
 
 int Bll::idenfity(int iTaskId, Message *pUndoTask) {
+    m_pReadyListLocker->lock();
     if (!m_pIdDistributor->identityIdentification(pUndoTask, iTaskId, m_readyDeviceList, m_readyUserList)) {
+        m_pReadyListLocker->unlock();
         return -1;
     }
+    m_pReadyListLocker->unlock();
     return 0;
 }
 int Bll::transmit(int iTaskId, Message *pUndoTask, std::list <ReadyDevice> &readyDeviceList) {
+    m_pReadyListLocker->lock();
     if (!m_pCommandTransmitter->forwardCommand(pUndoTask, iTaskId, readyDeviceList)) {
+        m_pReadyListLocker->unlock();
         return -1;
     }
+    m_pReadyListLocker->unlock();
     return 0;
 }
 int Bll::update(int iTaskId, Message *pUndoTask) {
@@ -92,7 +110,6 @@ bool Bll::pushMessage(int iTaskId, Message *pUndoTask) {
         }
     }
     else if (ret == 3) {
-        std::cout << "ACK!!!!" << std::endl;
         if (!m_pCommandTransmitter->getResponse(pUndoTask, iTaskId, m_readyUserList)) {
             return false;
         }

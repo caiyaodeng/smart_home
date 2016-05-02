@@ -53,5 +53,6 @@ class Bll {
         PollingMachine *m_pStatusPoller;
         Dal *m_pDal;
         mynamespace::NetWork *m_pNetGetter;
+        Locker *m_pReadyListLocker;
 };
 #endif

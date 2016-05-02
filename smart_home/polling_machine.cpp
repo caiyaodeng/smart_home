@@ -14,14 +14,33 @@ PollingMachine::PollingMachine() {
 PollingMachine::~PollingMachine() {
 
 }
-bool PollingMachine::pollingTask(std::list <ReadyDevice> &readyDeviceList,Dal *&pDal) {
-    std::list <ReadyDevice>::iterator i;
-    
-	for (i = readyDeviceList.begin(); i != readyDeviceList.end() ; i++) {
-		sprintf((char *)(*i).getPeerAddr(), "dSEQSERV%04d0000--------------------------------|", (*i).getDeviceId());
-        *((*i).getPeerLenAddr()) = COMMAND_SIZE+18;
-        pDal->sendToPeer((*i).getTaskId());
-	}
 
-    return true;
+void PollingMachine::setPollingObj(std::list <ReadyDevice> *readyDeviceList, Dal *&pDal, Locker *&pReadyListLocker) {
+    m_pDal = pDal;
+    m_readyDeviceList = readyDeviceList;
+    m_readylist_lock = pReadyListLocker;
+    std::cout << "poling" << m_readyDeviceList << std::endl;
+    std::cout << "poling" << readyDeviceList << std::endl;
+}
+
+void *PollingMachine::startPolling(void *arg) {
+    while (true) {
+        sleep(5);
+        ((PollingMachine *)arg)->pollingTask();
+    }
+    return nullptr;
+}
+
+void PollingMachine::pollingTask() {
+    std::list <ReadyDevice>::iterator i;
+    std::cout << "polling !" << std::endl;
+
+    std::cout << "polin1g" << m_readyDeviceList << std::endl;
+    for (i= m_readyDeviceList->begin(); i!= m_readyDeviceList->end(); i++) {
+        sprintf((char *)(*i).getPeerAddr(), "dSEQSERV%04d0000--------------------------------|", (*i).getDeviceId());
+        *((*i).getPeerLenAddr()) = COMMAND_SIZE+18;
+        m_pDal->sendToPeer((*i).getTaskId());
+        std::cout << "2polling !" << std::endl;
+    }
+    std::cout << "3polling !" << std::endl;
 }
