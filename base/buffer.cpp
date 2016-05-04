@@ -12,7 +12,7 @@ namespace mynamespace {
     m_buf (NULL),
     m_length (10){
         m_buf = (uint8_t *)malloc(BUFFER_SIZE);
-        memcpy(m_buf, "inihao", 7);
+        memcpy(m_buf, "default", 8);
     }
     Buffer::~Buffer() {
         if (m_buf != NULL) {
@@ -48,19 +48,9 @@ namespace mynamespace {
         m_length = 0;
     }
     bool Buffer::is_full() {
-        if (m_length == BUFFER_SIZE) {
-            return true;
-        } 
-        else {
-            return false;
-        }
+        return m_length == BUFFER_SIZE; 
     }
     bool Buffer::is_empty() {
-        if (m_length == 0) {
-            return true;
-        } 
-        else {
-            return false;
-        } 
+        return m_length == 0; 
     }
 }

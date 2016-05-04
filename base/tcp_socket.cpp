@@ -40,11 +40,7 @@ namespace mynamespace {
         int left = m_send_pos;
         int ret = m_send_buf->get_buf(buf);
         int send_pos = 0;
-        std::cout << "left:" << left << std::endl;
         m_lock.unlock();
-        //std::cout << "TcpSocket :senf_buf() ret:" << ret << std::endl;
-        //std::cout << "TcpSocket :senf_buf() fd:" << m_socket << std::endl;
-        //std::cout << "TcpSocket :senf_buf() left:" << left << std::endl;
         if (ret == 0) {
             return 0;
         }
@@ -61,7 +57,6 @@ namespace mynamespace {
         }
 
         if (left == 0) {
-            //m_send_pos = 0;
             std::cout << "send_ok:" << buf << std::endl;
             return 0;
         }
