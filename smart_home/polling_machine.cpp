@@ -38,7 +38,6 @@ void PollingMachine::pollingTask() {
         sprintf((char *)(*i).getPeerAddr(), "dSEQSERV%04d0000--------------------------------|", (*i).getDeviceId());
         *((*i).getPeerLenAddr()) = COMMAND_SIZE+18;
         m_pDal->sendToPeer((*i).getTaskId());
-        std::cout << "2polling !" << std::endl;
     }
     m_readylist_lock->unlock();
 }

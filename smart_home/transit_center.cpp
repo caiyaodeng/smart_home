@@ -144,9 +144,9 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
     for (int j=0; j<iCount; ++j) {
         for (i = readyDeviceList.begin(); i != readyDeviceList.end() ; i++) {
             if ((*i).getDeviceId() == iDeviceId[j]) {
-                memcpy((*i).getPeerAddr(), pDefaultActions[j], COMMAND_SIZE);
+                sprintf((char *)(*i).getPeerAddr(), "dSEQSERV%04d0032%s|", (*i).getDeviceId(), pDefaultActions[j]);
                 std::cout << "peerAddr:" << pDefaultActions[j] << std::endl;
-                *((*i).getPeerLenAddr()) = COMMAND_SIZE;
+                *((*i).getPeerLenAddr()) = COMMAND_SIZE+18;
                 m_pDal->sendToPeer((*i).getTaskId());
             }    
         }
