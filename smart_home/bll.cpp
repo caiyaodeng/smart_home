@@ -51,10 +51,7 @@ bool Bll::init() {
     m_pRecvMessageShunter = new MessageShunter();
     m_pReadyListLocker = new Locker();
 
-    std::cout << "1." << &(m_readyDeviceList) << std::endl;
-    std::cout << "1." << m_pDal << std::endl;
     m_pStatusPoller->setPollingObj(&m_readyDeviceList, m_pDal, m_pReadyListLocker);
-    std::cout << "ibll.cpp" << &m_readyDeviceList << std::endl;
     /*start polling*/
     pthread_t trd_polling = 0;
     pthread_create(&trd_polling, NULL, m_pStatusPoller->startPolling, m_pStatusPoller);
