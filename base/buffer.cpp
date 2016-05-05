@@ -12,7 +12,7 @@ namespace mynamespace {
     m_buf (NULL),
     m_length (1){
         m_buf = (uint8_t *)malloc(BUFFER_SIZE);
-        memcpy(m_buf, "", 1);
+        memcpy(m_buf, "1", 1);
     }
     Buffer::~Buffer() {
         if (m_buf != NULL) {

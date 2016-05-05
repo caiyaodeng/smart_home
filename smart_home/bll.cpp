@@ -85,6 +85,28 @@ int Bll::update(int iTaskId, Message *pUndoTask) {
 }
 
 bool Bll::pushMessage(int iTaskId, Message *pUndoTask) {
+
+    if (pUndoTask == nullptr) {
+        std::cout << "get close"<< std::endl; 
+        std::list <ReadyUser>::iterator i;
+        for (i = m_readyUserList.begin(); i != m_readyUserList.end(); i++) {
+            if ((i->getTaskId()) == iTaskId) {
+                //std::cout << "UserId: " << i->getUserId() << std::endl << "TaskId: " << i->getTaskId() << std::endl <<"SendAddr: "<< i->getPeerAddr() << std::endl;
+                m_readyUserList.erase(i);
+                break;
+            }
+        }
+        std::list <ReadyDevice>::iterator j;
+        for (j = m_readyDeviceList.begin(); j != m_readyDeviceList.end(); j++) {
+            if ((j->getTaskId()) == iTaskId) {
+                std::cout << "DeviceId: " << j->getDeviceId() << std::endl << "TaskId: " << j->getTaskId() << std::endl << "SendAddr: " << j->getPeerAddr() << std::endl;
+                m_readyDeviceList.erase(j);
+                break;
+            }
+        }
+        return true;
+    }
+
     int ret = m_pRecvMessageShunter->shuntMsg(pUndoTask);
 
     if (ret == -1) {

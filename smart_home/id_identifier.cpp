@@ -190,7 +190,6 @@ int IdIdentifier::identityReadyUser(Message *pMsg, int iTaskId, std::list <Ready
     unsigned char *pMsgBuf = (unsigned char *)malloc(iMsgLen);
     pMsgData = (unsigned char *)malloc(iMsgDataLen+2+2+2);
     memset(pMsgData, '\0', iMsgDataLen+2+2+2);
-std::cout<<"..................."<<iDeviceRet<<"..................."<<strUser<<"..................."<<iRoomRet<<"..................."<<strRoomDevice<<"..................."<<iModelDeviceRet<<"..................."<<strModelDevice<<"........................................"<<std::endl;
     
     memcpy(pMsgData, "[",1);
     memcpy(pMsgData+1, (const char *)strUser ,iDeviceRet);
