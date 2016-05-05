@@ -7,6 +7,7 @@ SRC1=srv.cpp \
 	 ../net/net_work.cpp \
 	 ../base/buffer.cpp \
 	 ../base/socket_util.cpp \
+	 ../base/timex.cpp \
 	 ../net/tcp_socket.cpp \
 	 ../db/mysql/db_mysql.cpp \
 	 id_identifier.cpp \

@@ -34,8 +34,6 @@ int Dal::execute(const char *pSql, char ***&pResult, int *pRow, int *pColum, cha
     return m_pDB->get_string(strResult); 
 }
 bool Dal::sendToPeer(int iTaskId) {
-    std::cout << "dal:" << iTaskId << std::endl;
-    std::cout << "m_pNet" << m_pNet << std::endl;
     if (m_pNet->push_msg(iTaskId) != 0) {
         return false;
     }

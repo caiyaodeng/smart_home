@@ -78,7 +78,7 @@ int Bll::transmit(int iTaskId, Message *pUndoTask, std::list <ReadyDevice> &read
     return 0;
 }
 int Bll::update(int iTaskId, Message *pUndoTask) {
-    if (!m_pUserConfigUpdater->updateConfiguration(pUndoTask, iTaskId)) {
+    if (!m_pUserConfigUpdater->updateConfiguration(pUndoTask, iTaskId, m_readyDeviceList)) {
         return -1;
     }
     return 0;

@@ -8,7 +8,7 @@
 #ifndef _TCP_TASK_POOL_H_
 #define _TCP_TASK_POOL_H_
 
-#include "../base/tcp_socket.h"
+#include "tcp_socket.h"
 #include <sys/epoll.h>
 #include <stack>
 #include <list>

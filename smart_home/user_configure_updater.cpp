@@ -17,7 +17,7 @@ UserConfigureUpdater::~UserConfigureUpdater() {
 
 }
 
-bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId) {
+bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId, std::list <ReadyDevice> readyDeviceList) {
     memcpy(pMsg->peer_addr.data_addr, (const char *)"updateConfiguration", 20);
     *(pMsg->peer_addr.len_addr) = 20;
 
@@ -35,6 +35,7 @@ bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId) {
         memset(pDefaultAction, '\0' ,33);
         memcpy(pName, pContrlSet->protocol_contrl.name, 16);
         memcpy(pDefaultAction, pContrlSet->protocol_contrl.default_action, 32);
+        std::cout << "defaultAction: " << pDefaultAction << std::endl;
         if (*pContrlSet->protocol_contrl.conf_way == ROOM_DEVICE) {
             if (!addConf("room", pName, (const char *)pContrlSet->protocol_contrl.device_serial, (const char *)pDefaultAction, pMsg->source_id)) {
                 memcpy(pMsg->peer_addr.data_addr, (const char *)"update failed", 14);
@@ -55,12 +56,56 @@ bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId) {
 
     /*Time ADJ*/
     if (*pContrlSet->protocol_contrl.time_adjust == TIME_ADJ) {
+        /*get UTC time*/
+        unsigned char strUTC[4];
+        unsigned char pCommand[33];
+        memset(strUTC, 0, 4);
+        memset(pCommand, '-', 32);
+        pCommand[32] = '\0';
+        if (!tx::get_UTC_E8(strUTC)) {
+            return false;
+        }
+        memcpy(pCommand+14, strUTC, 4);
 
+        std::cout << "ddfdfd"  << pCommand << std::endl;
+        /*start check time*/
+        char pSQL[100];
+        memset(pSQL, 0, 100);
+        sprintf(pSQL, "select deviceId from roomdevice where userid = %d;", pMsg->source_id);
+        std::cout << "pSql"<< pSQL << std::endl;
+
+        /*quary from DB*/
+        char ***pResult = nullptr;
+        char *strResult = nullptr;
+        int iRow(0), iColum(0);
+
+        if (m_pDal->execute(pSQL, pResult, &iRow, &iColum, strResult) == -1) {
+            return false;
+        }
+        int iDeviceId[iRow];
+        int iCount = iRow;
+        for (int i=0; i<iCount; ++i) { /*cpy device id*/
+            iDeviceId[i] = atoi(pResult[i+1][0]);
+        }
+
+        std::list <ReadyDevice>::iterator i;
+        for (int j=0; j<iCount; ++j) {
+            for (i = readyDeviceList.begin(); i != readyDeviceList.end() ; i++) {
+                if ((*i).getDeviceId() == iDeviceId[j]) {
+                    memset((char *)(*i).getPeerAddr(), '\0', COMMAND_SIZE+18);
+                    sprintf((char *)(*i).getPeerAddr(), "dSEQSERV%04d0032%s|", (*i).getDeviceId(), pCommand);
+                    std::cout << "peerAddr:" << (char *)(*i).getPeerAddr() << std::endl;
+                    *((*i).getPeerLenAddr()) = COMMAND_SIZE+18;
+                    m_pDal->sendToPeer((*i).getTaskId());
+                }    
+            }
+        }
+        memset(pSQL, 0, 100);
     }
 
     /*Remote Update*/
     if (*pContrlSet->protocol_contrl.remote_update == UPD) {
-        
+
     }
 
     /*Reset*/

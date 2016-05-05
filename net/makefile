@@ -7,7 +7,7 @@ SRC1=main.cpp \
 	 net_work.cpp \
 	 ../base/buffer.cpp \
 	 ../base/socket_util.cpp \
-	 ../base/tcp_socket.cpp
+	 tcp_socket.cpp
 
 start:$(OBJK1) 
 	$(CC) -o $(EXEC1) $(OBJK1) -lpthread

@@ -144,6 +144,7 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
     for (int j=0; j<iCount; ++j) {
         for (i = readyDeviceList.begin(); i != readyDeviceList.end() ; i++) {
             if ((*i).getDeviceId() == iDeviceId[j]) {
+                memset((char *)(*i).getPeerAddr(), 0, COMMAND_SIZE+18);
                 sprintf((char *)(*i).getPeerAddr(), "dSEQSERV%04d0032%s|", (*i).getDeviceId(), pDefaultActions[j]);
                 std::cout << "peerAddr:" << pDefaultActions[j] << std::endl;
                 *((*i).getPeerLenAddr()) = COMMAND_SIZE+18;
@@ -179,7 +180,6 @@ bool TransitCenter::pushServResponse(int iDeviceId, const char *pData) {
     if (m_pDal->execute(pSQL, pResult, &iRow, &iColum, strResult) == -1) {
         return false;
     }
-   //
     return true;
 }
 bool TransitCenter::pushUserResponse(int iUserId, int iDeviceId, std::list <ReadyUser> &readyUserList, const char *pData) { 
