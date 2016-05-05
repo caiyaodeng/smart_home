@@ -67,7 +67,6 @@ bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId, std::
         }
         memcpy(pCommand+14, strUTC, 4);
 
-        std::cout << "ddfdfd"  << pCommand << std::endl;
         /*start check time*/
         char pSQL[100];
         memset(pSQL, 0, 100);

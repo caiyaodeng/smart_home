@@ -14,8 +14,7 @@ namespace mynamespace {
     }
 
     NetWork::NetWork() {
-        //m_thread_pool = new ThreadPool <TcpSocket> (1);
-        //m_task_pool = new TcpTaskPool();
+        
     }
 
     NetWork::~NetWork() {
@@ -51,13 +50,6 @@ namespace mynamespace {
         int listen_fd, nfds, epoll_fd;
         signal(SIGCHLD, handle);
 
-        //NetWork::m_thread_pool = new ThreadPool <TcpSocket> (1);
-        //NetWork::m_task_pool = new TcpTaskPool();
-
-        /*if (! NetWork::m_task_pool->init()) {
-            perror("m_task_pool::init");
-            exit(EXIT_FAILURE);
-        }*/
         epoll_fd = m_task_pool->get_epoll();
         if (epoll_fd == -1) {
             perror("epoll_fd");
@@ -81,7 +73,6 @@ namespace mynamespace {
                     cout << "-------------------------------enter err" << endl;
                     printf("close %d\n", events[n].data.fd); //err
                     m_task_pool->close_connect(events[n].data.fd);
-                    //close(events[n].data.fd);
                     printf("close %d\n", events[n].data.fd);  
                     cout << "-------------------------------exit err" << endl;
                 }
@@ -100,15 +91,13 @@ namespace mynamespace {
                             std::cout << "--------------------------exit read" << std::endl;
                             continue;
                         }
-                        //m_thread_pool->append(m_task_pool->get_undo_task());
-                        //cout << "undo_task" << m_task_pool->get_undo_task() << endl;
                         std::cout << "--------------------------exit read" << std::endl;
                     }
                 } 
                 else if (events[n].events & EPOLLOUT) {
                     std::cout << "------------------------enter write" << std::endl;
                     printf("send %d\n", events[n].data.fd); //read
-        /*            if ( !m_task_pool->send_msg(events[n].data.fd)) {
+                    /*  if ( !m_task_pool->send_msg(events[n].data.fd)) {
                         ERR_EXIT("err::main", "write");
                         exit(EXIT_FAILURE);
                     }

@@ -212,7 +212,6 @@ namespace mynamespace {
             }
             close(conn_fd);
 
-            printf("nihao");
             return false;
         }
         if (epoll_ctl(m_epoll_fd, EPOLL_CTL_DEL, conn_fd, NULL) == -1) {
@@ -221,9 +220,15 @@ namespace mynamespace {
         }
         close(conn_fd);
 
+        /*close event*/
+        TcpSocket *undo_task = new TcpSocket();
+        add_undo_task(del_subscript, undo_task);
+
         push_free_task(del_subscript);
         std::cout << "reset id free" << del_subscript << endl;
 
+        delete undo_task;
+        undo_task = nullptr;
         return true;
     }
     int TcpTaskPool::recv_msg(const int fd) {
