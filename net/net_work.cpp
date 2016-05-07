@@ -64,8 +64,10 @@ namespace mynamespace {
             nfds = epoll_wait(epoll_fd, events, MAX_EVENTS, -1);
             std::cout << "**********************************************************" << std::endl;
             if (nfds == -1) {
-                perror("err:epoll_wait");
-                exit(EXIT_FAILURE);
+                if (errno != EINTR) {
+                    perror("err:epoll_wait");
+                    exit(EXIT_FAILURE);
+                }
             }
             for (int n = 0; n < nfds; n++) {
                 cout << "loop 2 epoll_wait num:" << nfds << endl;

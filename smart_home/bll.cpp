@@ -53,8 +53,8 @@ bool Bll::init() {
 
     m_pStatusPoller->setPollingObj(&m_readyDeviceList, m_pDal, m_pReadyListLocker);
     /*start polling*/
-    pthread_t trd_polling = 0;
-    pthread_create(&trd_polling, NULL, m_pStatusPoller->startPolling, m_pStatusPoller);
+    //pthread_t trd_polling = 0;
+    //pthread_create(&trd_polling, NULL, m_pStatusPoller->startPolling, m_pStatusPoller);
      
     return true;
 }
