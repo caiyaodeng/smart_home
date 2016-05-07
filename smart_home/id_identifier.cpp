@@ -39,7 +39,7 @@ int IdIdentifier::identityReadyDevice(Message *pMsg, int iTaskId, std::list <Rea
     memcpy(pData, pMsg->data_ptr, iDataLen);
     //std::cout << pData << std::endl;
     char *pSql = (char *)malloc(100);
-    memset(pSql, 0, 100);
+    memset(pSql, 0, 200);
     char ***pResult = nullptr;
     int iRow = 0;
     int iCoulmn = 0;
@@ -119,8 +119,8 @@ int IdIdentifier::identityReadyUser(Message *pMsg, int iTaskId, std::list <Ready
     char *pSub, *pName, *pPassword; 
     bool isName = true;
     bool isPassword = true;
-    char *pSql = (char *)malloc(100);
-    memset(pSql, 0, 100);
+    char *pSql = (char *)malloc(200);
+    memset(pSql, 0, 200);
     char ***pResult = nullptr;
     int iRow = 0;
     int iCoulmn = 0;
@@ -149,13 +149,18 @@ int IdIdentifier::identityReadyUser(Message *pMsg, int iTaskId, std::list <Ready
     int iDeviceRet = 0;
     int iMsgId = -1;
     iMsgId = atoi(pResult[1][0]);
+    std::cout << iMsgId << std::endl;
     unsigned char *strUser =nullptr;
     unsigned char *pMsgData = nullptr;
-    sprintf(pSql, "select * from device where deviceId in (select deviceId from roomdevice where userId='%d');", iMsgId);
+    
+    sprintf(pSql, "SELECT * FROM device WHERE deviceId IN (SELECT deviceId FROM roomdevice WHERE userId=%d UNION SELECT deviceId FROM modeldevice WHERE userId=%d);", iMsgId, iMsgId);
+    //sprintf(pSql, "select * from device where deviceId in (select deviceId from roomdevice where userId='%d');", iMsgId);
     if ((iDeviceRet = m_pDal->execute(pSql, pResult, &iRow, &iCoulmn, strResult)) == -1) {
         std::cout << "false" << std::endl;
         return -1;
     }
+    std::cout << iDeviceRet << std::endl;
+    std::cout<< strResult << std::endl;
     iMsgDataLen += iDeviceRet;
     strUser=(unsigned char *)malloc(iDeviceRet*sizeof(char));
     memcpy(strUser,strResult,iDeviceRet);

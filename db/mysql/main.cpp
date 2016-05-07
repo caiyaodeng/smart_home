@@ -28,7 +28,7 @@ int main () {
 
     //objDB->sql_db("select * from user;", (char ***&)result, &row, &coulmn);
     //objDB->sql_db("select userId from user where userName='caiyaodeng' and password='1234';", (char ***&)result, &row, &coulmn);
-    objDB->sql_db("select * from roomdevice where userId='1';", (char ***&)result, &row, &coulmn);
+    objDB->sql_db("SELECT * FROM device WHERE deviceId IN (SELECT deviceId FROM roomdevice WHERE userId=1 UNION SELECT deviceId FROM modeldevice WHERE userId=1);", (char ***&)result, &row, &coulmn);
 
     cout << row << endl;
     cout << coulmn << endl;
