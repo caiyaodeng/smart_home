@@ -201,6 +201,7 @@ bool TransitCenter::pushUserResponse(int iUserId, int iDeviceId, std::list <Read
     pCommand[32] = '\0';
     for (i=readyUserList.begin(); i != readyUserList.end(); i++) {
         if ((*i).getUserId() == iUserId) {
+            memset((char *)(*i).getPeerAddr(), 0,BUFFER_SIZE);
             sprintf((char *)(*i).getPeerAddr(), "dACK%04d%04d0032%s|", iDeviceId, iUserId, pCommand);
             *((*i).getPeerLenAddr()) = COMMAND_SIZE+18;
             m_pDal->sendToPeer((*i).getTaskId());
