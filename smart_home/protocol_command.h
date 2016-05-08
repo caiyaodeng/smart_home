@@ -62,7 +62,10 @@ namespace cmd {
         uint8_t time_adjust[1];
         uint8_t remote_update[1];
         uint8_t reset[1];
-        uint8_t reserve[123];
+        uint8_t collect[1];
+        uint8_t collect_device_id[4];
+        uint8_t collect_name[16];
+        uint8_t reserve[38];
     }ProtocolContrl;
 
     typedef union __protocol_contrl_command {

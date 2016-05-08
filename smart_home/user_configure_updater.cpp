@@ -29,6 +29,7 @@ bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId, std::
 
     /*Conf Add*/
     if (*pContrlSet->protocol_contrl.conf_opt == CONF_ENABLE) {
+    //    std::cout << "*!!!!!!Conf ADD " << std::endl;
         char pName[16];
         char pDefaultAction[33];
         memset(pName, 0 ,16);
@@ -56,6 +57,7 @@ bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId, std::
 
     /*Time ADJ*/
     if (*pContrlSet->protocol_contrl.time_adjust == TIME_ADJ) {
+    //    std::cout << "*!!!!!!Time ADJ " << std::endl;
         /*get UTC time*/
         unsigned char strUTC[4];
         unsigned char pCommand[33];
@@ -104,11 +106,12 @@ bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId, std::
 
     /*Remote Update*/
     if (*pContrlSet->protocol_contrl.remote_update == UPD) {
-
+        //std::cout << "*!!!!!!Update " << std::endl;
     }
 
     /*Reset*/
     if (*pContrlSet->protocol_contrl.reset == RESET) {
+       // std::cout << "*!!!!!!Reset " << std::endl;
         if(!resetConf(pMsg->source_id)) {
             memcpy(pMsg->peer_addr.data_addr, (const char *)"update failed", 14);
             *(pMsg->peer_addr.len_addr) = 14;
@@ -117,6 +120,17 @@ bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId, std::
     }
 
     /*collect*/
+    unsigned char pTime[20];
+    if (!tx::get_Time_E8(pTime)) {
+      return false;
+    }  
+
+    if (*pContrlSet->protocol_contrl.collect == COLLECT) {
+       // std::cout << "*!!!!!!Collect " << std::endl;
+       if (!collectDevice(atoi((char *)pContrlSet->protocol_contrl.collect_device_id), pTime, pContrlSet->protocol_contrl.collect_name)) {
+            return false;
+        }
+    }
 
     memcpy(pMsg->peer_addr.data_addr, (const char *)"update successed", 16);
     *(pMsg->peer_addr.len_addr) = 16;
@@ -155,8 +169,12 @@ bool UserConfigureUpdater::addConf(const char *ptable, const char *pName, const 
     char pSQL[100]; 
     memset(pSQL, 0, 100);
     int iRow(0), iColum(0);
+    char *strDeviceCode = (char *)malloc (12);
+    memset (strDeviceCode, '\0', 12);
+    memcpy(strDeviceCode, pDeviceCode, 11);
 
-    sprintf(pSQL, "select deviceId from device where deviceCode = %s;", pDeviceCode);
+    sprintf(pSQL, "select deviceId from device where deviceCode = %s;", strDeviceCode);
+    std::cout << pSQL << std::endl;
     if (m_pDal->execute(pSQL, pResult, &iRow, &iColum, strResult) == -1) {
         return false;
     }
@@ -169,5 +187,13 @@ bool UserConfigureUpdater::addConf(const char *ptable, const char *pName, const 
     }
 
     std::cout << pSQL << std::endl;
+    return true;
+}
+bool UserConfigureUpdater::collectDevice(const int iDeviceId, const unsigned char *pTime, const unsigned char *pGroupName) {
+
+    std::cout << "*!!!!!!Collect " << std::endl;
+    std::cout << iDeviceId << std::endl;
+    std::cout << pTime << std::endl;
+    std::cout << pGroupName << std::endl;
     return true;
 }
