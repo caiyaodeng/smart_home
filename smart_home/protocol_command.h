@@ -35,6 +35,8 @@
 #define NO_UPD  '0'
 #define RESET  '1'           /*Reset Conf*/
 #define NO_RESET  '0'
+#define COLLECT '1'         /*Collect*/
+#define NO_COLLECT '0'
 
 namespace cmd {
     /*data of Contrl CMD*/

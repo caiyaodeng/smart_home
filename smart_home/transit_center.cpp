@@ -180,6 +180,18 @@ bool TransitCenter::pushServResponse(int iDeviceId, const char *pData) {
     if (m_pDal->execute(pSQL, pResult, &iRow, &iColum, strResult) == -1) {
         return false;
     }
+
+    /*get time*/
+    unsigned char pTime[20];
+    if (!tx::get_Time_E8(pTime)) {
+        return false;
+    }  
+
+    sprintf(pSQL, "insert into historydata(deviceId, recordTime, historyStatus)value (%d, '%s', '%s');", iDeviceId, pTime, pCommand);
+    std::cout << pSQL << std::endl;
+    if (m_pDal->execute(pSQL, pResult, &iRow, &iColum, strResult) == -1) {
+        return false;
+    }
     return true;
 }
 bool TransitCenter::pushUserResponse(int iUserId, int iDeviceId, std::list <ReadyUser> &readyUserList, const char *pData) { 

@@ -18,5 +18,8 @@
 namespace tx {
     /*get UTC*/
     bool get_UTC_E8(unsigned char *strUTC);
+
+    /*get time right now*/
+    bool get_Time_E8(unsigned char *strTime);
 }
 #endif

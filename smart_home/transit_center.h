@@ -12,6 +12,7 @@
 #include "dal.h"
 #include "ready_device.h"
 #include "ready_user.h"
+#include "../base/timex.h"
 
 class TransitCenter {
     public:

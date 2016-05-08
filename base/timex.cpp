@@ -22,5 +22,14 @@ namespace tx {
 
 		return true;  
 	}  
+
+    bool get_Time_E8(unsigned char *strTime) {
+		struct	tm *pTime;;
+	 	time_t time_UTC;
+  		time(&time_UTC);
+  		pTime=localtime(&time_UTC);
+  		strftime((char *)strTime,100,"%Y/%m/%d/%T",pTime);
+        return true;
+    }
 }
 

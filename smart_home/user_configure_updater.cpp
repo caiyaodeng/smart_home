@@ -116,7 +116,7 @@ bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId, std::
         }
     }
 
-    /*update database*/
+    /*collect*/
 
     memcpy(pMsg->peer_addr.data_addr, (const char *)"update successed", 16);
     *(pMsg->peer_addr.len_addr) = 16;
