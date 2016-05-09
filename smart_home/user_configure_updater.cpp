@@ -196,5 +196,17 @@ bool UserConfigureUpdater::collectDevice(const int iUserId, const int iDeviceId,
     std::cout << iUserId << std::endl;
     std::cout << pTime << std::endl;
     std::cout << pGroupName << std::endl;
+    
+    char ***pResult = nullptr;
+    char *strResult = nullptr;
+    char pSQL[100]; 
+    memset(pSQL, 0, 100);
+    int iRow(0), iColum(0);
+
+    sprintf(pSQL, "insert into collect(userId, deviceId, collectTime, groupName)value (%d, %d, '%s', '%s');", iUserId, iDeviceId, pTime, pGroupName);
+    std::cout << pSQL << std::endl;
+    if (m_pDal->execute(pSQL, pResult, &iRow, &iColum, strResult) == -1) {
+        return false;
+    }
     return true;
 }
