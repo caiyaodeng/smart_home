@@ -19,7 +19,7 @@ class UserConfigureUpdater {
     protected:
         inline bool addConf(const char *ptable, const char *pName, const char *pDeviceId, const char *pDefaultAction, int iUserId);
         inline bool resetConf(int iUserId);
-        inline bool collectDevice(const int iDeviceId, const unsigned char *pTime, const unsigned char *pGroupName);
+        inline bool collectDevice(const int iUserId, const int iDeviceId, const unsigned char *pTime, const unsigned char *pGroupName);
     private:
         Dal *m_pDal;
 };

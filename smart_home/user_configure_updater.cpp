@@ -127,7 +127,7 @@ bool UserConfigureUpdater::updateConfiguration(Message *pMsg, int iTaskId, std::
 
     if (*pContrlSet->protocol_contrl.collect == COLLECT) {
        // std::cout << "*!!!!!!Collect " << std::endl;
-       if (!collectDevice(atoi((char *)pContrlSet->protocol_contrl.collect_device_id), pTime, pContrlSet->protocol_contrl.collect_name)) {
+       if (!collectDevice(pMsg->source_id, atoi((char *)pContrlSet->protocol_contrl.collect_device_id), pTime, pContrlSet->protocol_contrl.collect_name)) {
             return false;
         }
     }
@@ -189,10 +189,11 @@ bool UserConfigureUpdater::addConf(const char *ptable, const char *pName, const 
     std::cout << pSQL << std::endl;
     return true;
 }
-bool UserConfigureUpdater::collectDevice(const int iDeviceId, const unsigned char *pTime, const unsigned char *pGroupName) {
+bool UserConfigureUpdater::collectDevice(const int iUserId, const int iDeviceId, const unsigned char *pTime, const unsigned char *pGroupName) {
 
     std::cout << "*!!!!!!Collect " << std::endl;
     std::cout << iDeviceId << std::endl;
+    std::cout << iUserId << std::endl;
     std::cout << pTime << std::endl;
     std::cout << pGroupName << std::endl;
     return true;
