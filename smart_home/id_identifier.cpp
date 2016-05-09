@@ -154,7 +154,6 @@ int IdIdentifier::identityReadyUser(Message *pMsg, int iTaskId, std::list <Ready
     unsigned char *pMsgData = nullptr;
     
     sprintf(pSql, "SELECT * FROM device WHERE deviceId IN (SELECT deviceId FROM roomdevice WHERE userId=%d UNION SELECT deviceId FROM modeldevice WHERE userId=%d);", iMsgId, iMsgId);
-    //sprintf(pSql, "select * from device where deviceId in (select deviceId from roomdevice where userId='%d');", iMsgId);
     if ((iDeviceRet = m_pDal->execute(pSql, pResult, &iRow, &iCoulmn, strResult)) == -1) {
         std::cout << "false" << std::endl;
         return -1;
@@ -190,6 +189,18 @@ int IdIdentifier::identityReadyUser(Message *pMsg, int iTaskId, std::list <Ready
     strModelDevice=(unsigned char *)malloc(iModelDeviceRet*sizeof(char));
     memcpy(strModelDevice,strResult,iModelDeviceRet);
 
+    /*get from collect*/
+    unsigned  char *strCollect = nullptr;
+    int iCollectRet = 0;
+    sprintf(pSql, "select * from collect where userId='%d';", iMsgId);
+    if ((iCollectRet = m_pDal->execute(pSql, pResult, &iRow, &iCoulmn, strResult)) == -1) {
+        std::cout << "false" << std::endl;
+        return -1;
+    }
+    iMsgDataLen += iCollectRet;
+    strCollect=(unsigned char *)malloc(iCollectRet*sizeof(char));
+    memcpy(strCollect,strResult,iCollectRet);
+    
     /*combine header*/
     int iMsgLen = 16+iMsgDataLen+2+2+2;
     unsigned char *pMsgBuf = (unsigned char *)malloc(iMsgLen);
@@ -202,8 +213,11 @@ int IdIdentifier::identityReadyUser(Message *pMsg, int iTaskId, std::list <Ready
     memcpy(pMsgData+iDeviceRet+1+1, (const char *)strRoomDevice ,iRoomRet);
     memcpy(pMsgData+iDeviceRet+1+1+iRoomRet, ",",1);
     memcpy(pMsgData+iRoomRet+iDeviceRet+1+1+1, (const char *)strModelDevice ,iModelDeviceRet);
-    memcpy(pMsgData+iRoomRet+iDeviceRet+iModelDeviceRet+1+1+1, "]",1);
+    memcpy(pMsgData+iRoomRet+iDeviceRet+iModelDeviceRet+1+1+1, ",",1);
+    memcpy(pMsgData+iRoomRet+iDeviceRet+iModelDeviceRet+1+1+1+1, (const char *)strCollect ,iCollectRet);
+    memcpy(pMsgData+iRoomRet+iDeviceRet+iModelDeviceRet+1+1+1+1+iCollectRet, "]",1);
    // memcpy(pMsgData+iModelDeviceRet+iDeviceRet+iRoomRet, (const char *)strFixedTime ,iFixedTimeRet);
+   
     *(pMsgData+iMsgDataLen+4) = '|';
 std::cout<<pMsgData<<std::endl;
     memset(pMsgBuf, 0, iMsgLen);
