@@ -202,10 +202,10 @@ int IdIdentifier::identityReadyUser(Message *pMsg, int iTaskId, std::list <Ready
     memcpy(strCollect,strResult,iCollectRet);
     
     /*combine header*/
-    int iMsgLen = 16+iMsgDataLen+2+2+2;
+    int iMsgLen = 16+iMsgDataLen+2+2+2+2;
     unsigned char *pMsgBuf = (unsigned char *)malloc(iMsgLen);
-    pMsgData = (unsigned char *)malloc(iMsgDataLen+2+2+2);
-    memset(pMsgData, '\0', iMsgDataLen+2+2+2);
+    pMsgData = (unsigned char *)malloc(iMsgDataLen+2+2+2+2);
+    memset(pMsgData, '\0', iMsgDataLen+2+2+2+2);
     
     memcpy(pMsgData, "[",1);
     memcpy(pMsgData+1, (const char *)strUser ,iDeviceRet);
@@ -218,7 +218,7 @@ int IdIdentifier::identityReadyUser(Message *pMsg, int iTaskId, std::list <Ready
     memcpy(pMsgData+iRoomRet+iDeviceRet+iModelDeviceRet+1+1+1+1+iCollectRet, "]",1);
    // memcpy(pMsgData+iModelDeviceRet+iDeviceRet+iRoomRet, (const char *)strFixedTime ,iFixedTimeRet);
    
-    *(pMsgData+iMsgDataLen+4) = '|';
+    *(pMsgData+iMsgDataLen+5) = '|';
 std::cout<<pMsgData<<std::endl;
     memset(pMsgBuf, 0, iMsgLen);
     sprintf((char *)pMsgBuf, "uACKSERV%04d%04d%s", iMsgId, iMsgDataLen+1, pMsgData);
