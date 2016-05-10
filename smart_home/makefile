@@ -1,5 +1,7 @@
 .SUFFIXES:.cpp.o 
 CC=clang++ 	
+LIBSHAREPATH=/usr/lib64/mysql -lmysqlclient -lpthread  
+LIBSTATICPATH=../lib/libleveldb.a
 OBJK1=$(SRC1:.cpp=.o)
 EXEC1=server
 SRC1=srv.cpp \
@@ -23,7 +25,7 @@ SRC1=srv.cpp \
 	 dal.cpp
 
 start:$(OBJK1) 
-	$(CC) -o $(EXEC1) $(OBJK1) -L/usr/lib64/mysql -lmysqlclient -lpthread  
+	$(CC) -o $(EXEC1) $(OBJK1) -L$(LIBSHAREPATH) $(LIBSTATICPATH) 
 	@echo ---------ok------- 
 
 .cpp.o:$(SRC1)

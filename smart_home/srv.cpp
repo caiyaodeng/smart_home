@@ -9,6 +9,7 @@
 #include "../net/net_work.h"
 #include "message_parser.h"
 #include "bll.h"
+#include "leveldb/db.h" 
 using namespace std;
 
 int main () {
@@ -42,5 +43,6 @@ int main () {
     }
 
     cout << "-----ok----" << endl;
+
     return 0;
 }
