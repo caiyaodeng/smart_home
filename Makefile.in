@@ -3,7 +3,9 @@ CC		= clang++
 CFLAGS	= -O2 -Wall -std=c++11
 LDFLAGS	= -lm 
 INCLUDES= -I/usr/local/include
-LIBSHAREPATH=-L/usr/lib64/mysql/ -lmysqlclient -lpthread  
+LIBSHAREPATH=-L/usr/lib64/mysql -lmysqlclient -lpthread  \
+			 -Llib -lleveldb \
+			 -Wl,-rpath=lib
 
 
 # recursive make
