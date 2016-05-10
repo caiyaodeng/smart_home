@@ -19,7 +19,7 @@ int create_sem(int key, int *semid_ptr)
         if (errno == EEXIST)
         {
             ret = SEMERR_EEXIST;
-            ERR_EXIT ("create_sem", "检测到信号量集已经存在");
+            ERR_EXIT ("create_sem", "sem aready exited !");
             return ret;
         }
     }

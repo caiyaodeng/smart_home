@@ -1,7 +1,7 @@
 # target, subdir, objects in current dir
 TARGET	= serv_smart_home 
 SUBDIRS	= base \
-		  db/mysql/ \
+		  db/mysql \
 		  net \
 		  smart_home
 OBJECTS	= 
