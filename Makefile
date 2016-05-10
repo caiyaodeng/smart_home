@@ -1,5 +1,5 @@
 # target, subdir, objects in current dir
-TARGET	= test
+TARGET	= serv_smart_home 
 SUBDIRS	= base \
 		  db/mysql/ \
 		  net \
