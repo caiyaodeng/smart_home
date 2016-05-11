@@ -137,7 +137,6 @@ int IdIdentifier::identityReadyUser(Message *pMsg, int iTaskId, std::list <Ready
             isPassword = false;
         }
         pSub = strtok(NULL, pSplit); 
-        std::cout << "pSub:" << pSub << std::endl;
     } 
     sprintf(pSql, "select userId from user where userName='%s' and password='%s';", pName, pPassword);
     printf ("%s\n",pSql); 
