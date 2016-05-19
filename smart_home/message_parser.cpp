@@ -23,10 +23,10 @@ Message *MessageParser::changeToMessage(const unsigned char *pUndoMsg, int iUndo
     }
 
     /*close event*/
-    //if (iUndoMsgLength == 1) {
-    //    std::cout << "get close event1" << std::endl;
-    //    return nullptr;
-    //}
+    if (iUndoMsgLength == 1) {
+        std::cout << "get close event1" << std::endl;
+        return nullptr;
+    }
 
     Message *pMsg = (Message *)malloc(sizeof(Message)*sizeof(char));
     memset(pMsg, 0, sizeof(Message));

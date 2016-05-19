@@ -23,7 +23,7 @@ void PollingMachine::setPollingObj(std::list <ReadyDevice> *readyDeviceList, Dal
 
 void *PollingMachine::startPolling(void *arg) {
     while (true) {
-        sleep(5);
+        sleep(25);
         ((PollingMachine *)arg)->pollingTask();
     }
     return nullptr;

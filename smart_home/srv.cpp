@@ -27,13 +27,14 @@ int main () {
     objNet->init();
     objBll->init();
 
+/*
      leveldb::DB      *db;    
         leveldb::Options  options;    
         options.create_if_missing = true;
     leveldb::Status status = leveldb::DB::Open(options,"/tmp/testdb", &db);    
         assert(status.ok());
         
-
+*/
     while(true) {
         iTaskId = objNet->pull_msg(pUndoMsg, &iUndoMsgLength, pDoneMsg, pDoneMsgLength);
         if (iTaskId == -1) {

@@ -123,8 +123,8 @@ bool TransitCenter::multCommand(Message *pMsg, std::list <ReadyDevice> &readyDev
         iDeviceId[i] = atoi(pResult[i+1][0]);
     }
     for (int i=0; i<iCount; ++i) { /*malloc memory*/
-        pDefaultActions[i] = (char *)malloc(COMMAND_SIZE);
-        memset(pDefaultActions[i], 0, COMMAND_SIZE);
+        pDefaultActions[i] = (char *)malloc(COMMAND_SIZE+1);
+        memset(pDefaultActions[i], '\0', COMMAND_SIZE+1);
     }
     for (int i=0; i<iCount; ++i) {
         sprintf(pSQL, "select defaultAction from %sdevice where deviceId = %d and userid = %d and %sid = %d;", pTableName, iDeviceId[i], pMsg->source_id, pTableName, iId);

@@ -4,7 +4,8 @@ OBJECTS	= buffer.o \
 		  ipc_sem.o \
 		  ipc_shm.o \
 		  socket_util.o \
-		  timex.o
+		  timex.o \
+		  type.o
 
 
 all:subdirs ${OBJECTS}

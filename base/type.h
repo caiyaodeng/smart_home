@@ -7,6 +7,9 @@
 
 #ifndef _TYPE_H_
 #define _TYPE_H_
+#include <string.h>
+#include <iostream>
+using namespace std;
 
 struct BitFied{  
 	unsigned char a1:1;  
@@ -51,4 +54,9 @@ union type_int{
 	int i_t;  
 	unsigned char str_t[4];  
 };  
+
+int get_10(const unsigned char *p16);
+
+unsigned char *get_16(const int i10);
+
 #endif
