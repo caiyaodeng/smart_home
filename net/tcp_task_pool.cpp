@@ -43,7 +43,7 @@ namespace mynamespace {
         struct sockaddr_in servaddr;
         memset(&servaddr, 0, sizeof(servaddr));
         servaddr.sin_family = AF_INET;
-        servaddr.sin_port = htons(8001);
+        servaddr.sin_port = htons(8002);
         servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
         char *on;

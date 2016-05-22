@@ -31,5 +31,18 @@ namespace tx {
   		strftime((char *)strTime,100,"%Y/%m/%d/%T",pTime);
         return true;
     }
+    bool get_Time_E6(unsigned char *strTime) {
+		struct	tm *pTime;;
+	 	time_t time_UTC;
+  		time(&time_UTC);
+  		pTime=localtime(&time_UTC);
+        strTime[0]=(unsigned char)pTime->tm_sec;
+        strTime[1]=(unsigned char)pTime->tm_min;
+        strTime[2]=(unsigned char)pTime->tm_hour;
+        strTime[3]=(unsigned char)pTime->tm_mday;
+        strTime[4]=(unsigned char)pTime->tm_mon;
+        strTime[5]=(unsigned char)(pTime->tm_year-100);
+        return true;
+    }
 }
 

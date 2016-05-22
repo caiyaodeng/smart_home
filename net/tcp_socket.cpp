@@ -33,10 +33,8 @@ namespace mynamespace {
         memset(buf, 0, BUFFER_SIZE);
         m_lock.lock();
 
-        if (m_reference_count > 0) {
-            m_send_pos += m_send_buf->get_size();
-            m_reference_count --;
-        }
+        m_send_pos = m_send_buf->get_size();
+
         int left = m_send_pos;
         int ret = m_send_buf->get_buf(buf);
         int send_pos = 0;
@@ -50,7 +48,7 @@ namespace mynamespace {
         }
 
         std::cout << "send:" << buf << std::endl;
-        
+
         while ((ret = write(m_socket, buf+send_pos, left)) > 0) {
             send_pos += ret;
             left -= ret;

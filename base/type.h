@@ -58,5 +58,5 @@ union type_int{
 int get_10(const unsigned char *p16);
 
 unsigned char *get_16(const int i10);
-
+unsigned char *get_short_16(const int intValue);
 #endif

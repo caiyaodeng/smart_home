@@ -21,5 +21,6 @@ namespace tx {
 
     /*get time right now*/
     bool get_Time_E8(unsigned char *strTime);
+    bool get_Time_E6(unsigned char *strTime);
 }
 #endif
